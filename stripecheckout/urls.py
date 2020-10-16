@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from api import views
+from stripecheckout import views
 
-app_name = 'api'
+app_name = 'stripecheckout'
 
 
 urlpatterns = [

@@ -1,8 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <title>{{ item.name }}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="{% static 'stripecheckout/css/style.css' %}">
       <script src="https://js.stripe.com/v3/"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
   </head>
   <body>
     <form id="payment-form">
@@ -13,57 +17,17 @@
   <!-- We'll put the error messages in this element -->
         <div id="card-errors" role="alert"></div>
 
-        <button id="submit">Pay</button>
+        <button id="submit">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">Pay</span>
+      </button>
+
+        <p id="card-error" role="alert"></p>
+      <p class="result-message hidden">
+        Payment succeeded, see the result in your
+        <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+      </p>
     </form>
-
-    <script type="text/javascript">
-      // Create an instance of the Stripe object with your publishable API key
-      var stripe = Stripe('pk_test_51HcoaDIIdYahhqUdvMw04DLbfOoWv6UJj1omy0JzXc9FvrRHrU3c67yUFXil6a2RAzYJojQyDt2GGLKkzK21wWUa0025puWbnc');
-      var elements = stripe.elements();
-      var style = {
-                base: {
-                    color: "#32325d",
-                }
-      };
-
-      var card = elements.create("card", { style: style });
-      card.mount("#card-element");
-      var form = document.getElementById('payment-form');
-
-      form.addEventListener('submit', function(ev) {
-        ev.preventDefault();
-        fetch('/api/items/1/buy', {
-          method: 'GET',
-        })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(session) {
-          return stripe.confirmCardPayment(session.client_secret, {
-              payment_method: {
-                  card: card,
-                  billing_details: {
-                      name: 'Jenny Rosen'
-                  }
-              }
-          })
-        }).then(function(result) {
-          if (result.error) {
-            // Show error to your customer (e.g., insufficient funds)
-            console.log(result.error.message);
-          } else {
-            // The payment has been processed!
-            if (result.paymentIntent.status === 'succeeded') {
-                alert('success')
-              // Show a success message to your customer
-              // There's a risk of the customer closing the window before callback
-              // execution. Set up a webhook or plugin to listen for the
-              // payment_intent.succeeded event that handles any business critical
-              // post-payment actions.
-            }
-          }
-        });
-      });
-    </script>
+  <script src="{% static 'stripecheckout/js/script.js' %}"></script>
   </body>
 </html>
