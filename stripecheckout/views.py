@@ -22,6 +22,8 @@ class ItemBuyView(DetailView):
         for item in Order.items.all():
             total_price = total_price + item.price
 
+        # for discount in Order.discounts.all():
+
         return stripe.PaymentIntent.create(
             amount=total_price,
             currency='usd',

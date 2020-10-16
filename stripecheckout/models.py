@@ -46,8 +46,8 @@ class Tax(models.Model):
 
 class Order(models.Model):
     items = models.ManyToManyField(Item, verbose_name='Товары')
-    discount = models.ManyToManyField(Discount, blank=True, null=True)
-    tax = models.ManyToManyField(Tax, blank=True, null=True)
+    discounts = models.ManyToManyField(Discount, blank=True, null=True)
+    taxes = models.ManyToManyField(Tax, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Заказ'
