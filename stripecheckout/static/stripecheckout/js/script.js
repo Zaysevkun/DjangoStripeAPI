@@ -95,3 +95,4 @@ var loading = function(isLoading) {
     document.querySelector("#button-text").classList.remove("hidden");
   }
 };
+

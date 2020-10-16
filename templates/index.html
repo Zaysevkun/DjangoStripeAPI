@@ -2,13 +2,24 @@
 {% load static %}
 <html>
   <head>
-    <title>{{ item.name }}</title>
+    <title>Checkout</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="stylesheet" href="{% static 'stripecheckout/css/style.css' %}">
       <script src="https://js.stripe.com/v3/"></script>
       <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
   </head>
   <body>
+  <div id="column">
+
+        <table class="horizontal">
+        {% for item in order.items.all %}
+            <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.price }}</td>
+            </tr>
+        {% endfor %}
+        </table>
     <form id="payment-form">
         <div id="card-element">
     <!-- Elements will create input elements here -->
@@ -28,6 +39,7 @@
         <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
       </p>
     </form>
+  </div>
   <script src="{% static 'stripecheckout/js/script.js' %}"></script>
   </body>
 </html>
