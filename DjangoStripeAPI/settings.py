@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'stripe',
     'api',
 ]
 
@@ -125,4 +126,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-
+# stripe settings
+# if DEBUG:
+#     STRIPE_PUBLISHABLE_KEY=''
+#     STRIPE_SECRET_KEY=''
+# else:
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
