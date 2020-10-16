@@ -6,5 +6,6 @@ app_name = 'api'
 
 
 urlpatterns = [
-    path('buy/<int:item_id>', views.get_stripe_payment_indent)
+    path('items/<int:item_id>/buy', views.ItemBuyView.as_view()),
+    path('items/<int:item_id>/', views.ItemView.as_view()),
 ]
