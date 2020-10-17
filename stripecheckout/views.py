@@ -39,7 +39,7 @@ class ItemBuyView(DetailView):
 
         return stripe.PaymentIntent.create(
             amount=total_price,
-            currency='usd',
+            currency=order.currency,
             payment_method_types=['card'],
             metadata={'integration_check': 'accept_a_payment'},
         )

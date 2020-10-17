@@ -48,8 +48,14 @@ class Tax(models.Model):
 
 
 class Order(models.Model):
+    class CurrencyChoices(models.TextChoices):
+        USD = 'usd', 'Доллары'
+        RUB = 'rub', 'Рубли'
+
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     items = models.ManyToManyField(Item, verbose_name='Товары')
+    currency = models.CharField('Валюта товара', max_length=10, choices=CurrencyChoices.choices,
+                                default=CurrencyChoices.USD)
     discount = models.ForeignKey(Discount, models.SET_NULL,
                                  blank=True, null=True, verbose_name='Скидка')
     tax = models.ForeignKey(Tax, models.SET_NULL, blank=True,
