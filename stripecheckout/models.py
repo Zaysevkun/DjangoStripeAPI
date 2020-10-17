@@ -16,6 +16,10 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def price_in_cents(self):
+        return self.price * 100
+
 
 class Discount(models.Model):
     class TypeChoices(models.TextChoices):
@@ -33,6 +37,10 @@ class Discount(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def amount_in_cents(self):
+        return self.amount * 100
 
 
 class Tax(models.Model):
@@ -52,7 +60,6 @@ class Order(models.Model):
         USD = 'usd', 'Доллары'
         RUB = 'rub', 'Рубли'
 
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     items = models.ManyToManyField(Item, verbose_name='Товары')
     currency = models.CharField('Валюта товара', max_length=10, choices=CurrencyChoices.choices,
                                 default=CurrencyChoices.USD)
@@ -65,3 +72,27 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
         default_related_name = 'orders'
+
+    @property
+    def total_price(self):
+        total_price = 0.0
+        # sum up prices of items in order
+        for item in self.items.all():
+            total_price += item.price_in_cents
+        # check if discount is present, then according to type of discount, calculate it
+        if self.discount is not None:
+            discount = self.discount.amount
+            if self.discount.type == 'percentage':
+                total_price = total_price * (100 - discount) / 100
+            else:
+                total_price = total_price - self.discount.amount_in_cents
+        # check if discount is present, then calculate it
+        if self.tax is not None:
+            tax = self.tax.percentage
+            total_price += total_price * tax / 100
+
+        return round(total_price)
+
+    @property
+    def total_price_in_dollars(self):
+        return int(self.total_price) / 100

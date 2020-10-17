@@ -1,25 +1,40 @@
-version: '3.7'
+version: '3.8'
 
 services:
   web:
-    build: ./
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn DjangoStripeAPI.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./app/:/usr/src/app/
-    ports:
-      - 8000:8000
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8000
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
   db:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=stripeusr
+      - POSTGRES_PASSWORD=123321
+      - POSTGRES_DB=stripedb
 
 volumes:
   postgres_data:
+  static_volume:

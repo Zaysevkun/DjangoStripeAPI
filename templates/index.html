@@ -18,7 +18,7 @@
             <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.price|floatformat:"0" }}</td>
+            <td>{{ item.price|floatformat:"0" }} {{ order.currency }}</td>
             </tr>
         {% endfor %}
         {% if order.discount is not None %}
@@ -39,6 +39,11 @@
             <td>{{ order.tax.percentage }}%</td>
             </tr>
         {% endif %}
+        <tr>
+            <td>Итого</td>
+            <td></td>
+            <td>{{ order.total_price_in_dollars }} {{ order.currency }}</td>
+        </tr>
         </table>
     <form id="payment-form">
         <div id="card-element">
