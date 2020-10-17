@@ -26,10 +26,11 @@ card.on("change", function (event) {
     });
 
 var form = document.getElementById('payment-form');
+var order_id = document.getElementById("myVar").value;
 
 form.addEventListener('submit', function(ev) {
     ev.preventDefault();
-    fetch('/api/items/1/buy', {
+    fetch('/api/items/' + order_id + '/buy', {
         method: 'GET',
     }).then(function (response) {
         return response.json();

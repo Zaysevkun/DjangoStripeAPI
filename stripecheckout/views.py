@@ -18,11 +18,24 @@ class ItemBuyView(DetailView):
         return JsonResponse({'client_secret': intent.client_secret})
 
     @staticmethod
-    def get_intent(item):
-        for item in Order.items.all():
-            total_price = total_price + item.price
+    def get_intent(order):
+        total_price = 0.0
 
-        # for discount in Order.discounts.all():
+        for item in order.items.all():
+            total_price += item.price * 100
+
+        if order.discount is not None:
+            discount = order.discount.amount
+            if order.discount.type == 'percentage':
+                total_price = total_price * (100-discount) / 100
+            else:
+                total_price = total_price - discount * 100
+
+        if order.tax is not None:
+            tax = order.tax.percentage
+            total_price += total_price * tax / 100
+
+        total_price = round(total_price)
 
         return stripe.PaymentIntent.create(
             amount=total_price,

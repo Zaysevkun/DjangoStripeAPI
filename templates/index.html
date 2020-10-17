@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load mathfilters %}
 <html>
   <head>
     <title>Checkout</title>
@@ -9,6 +10,7 @@
       <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
   </head>
   <body>
+  <input type="hidden" id="myVar" name="variable" value="{{ order.id }}">
   <div id="column">
 
         <table class="horizontal">
@@ -16,9 +18,27 @@
             <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ item.price|floatformat:"0" }}</td>
             </tr>
         {% endfor %}
+        {% if order.discount is not None %}
+            <tr>
+            <td>Скидка</td>
+            <td>{{ order.discount.name }}</td>
+            {% if order.discount.type == 'percentage' %}
+                <td>{{ order.discount.amount }}%</td>
+            {% else %}
+                <td>-{{ order.discount.amount|floatformat:"0" }}</td>
+            {% endif %}
+            </tr>
+        {% endif %}
+        {% if order.tax is not None %}
+            <tr>
+            <td>Налог</td>
+            <td>{{ order.tax.name }}</td>
+            <td>{{ order.tax.percentage }}%</td>
+            </tr>
+        {% endif %}
         </table>
     <form id="payment-form">
         <div id="card-element">
