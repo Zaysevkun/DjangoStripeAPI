@@ -36,7 +36,7 @@ POSTGRES_DB=your_db_name
 ## Project setup without Docker
 
 1. `git clone https://github.com/Zaysevkun/DjangoStripeAPI`
-2  `create postgres db`
+2.  `create postgres db`
 3. `cd DjangoStripeAPI`
 4. `pip install -r requirements.txt`
 5. Add __.env__ file
