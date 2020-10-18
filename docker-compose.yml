@@ -30,10 +30,8 @@ services:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=stripeusr
-      - POSTGRES_PASSWORD=123321
-      - POSTGRES_DB=stripedb
+    env_file:
+      - ./.env.db
 
 volumes:
   postgres_data:
