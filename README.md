@@ -51,7 +51,8 @@ STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
 ```
 6. `python manage.py migrate`
-7. `python manage.py runserver 0.0.0.0:8000`
+7. `python manage.py collectstatic`
+8. `python manage.py runserver 0.0.0.0:8000`
 
 ## END POINTS
 
